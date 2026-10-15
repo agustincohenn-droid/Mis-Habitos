@@ -3,47 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Panel de Hábitos y Rachas</title>
+    <title>Panel de Hábitos y Salud</title>
 
-    <!-- Etiquetas Web App para iPadOS / iOS (Pantalla Completa) -->
+    <!-- Configuración Web App para Celular e iPad (Pantalla Completa) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mis Hábitos">
     <meta name="theme-color" content="#0f172a">
 
-    <!-- Ícono SVG embebido para la pantalla de inicio del iPad -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230f172a'/><rect x='28' y='28' width='124' height='124' rx='28' fill='%231e293b' stroke='%2338bdf8' stroke-width='4'/><path d='M55 95l22 22 48-52' stroke='%2310b981' stroke-width='14' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
+    <!-- Ícono SVG para la pantalla de inicio -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='42' fill='%230f172a'/><rect x='24' y='24' width='132' height='132' rx='30' fill='%231e293b' stroke='%2338bdf8' stroke-width='4'/><path d='M54 94l24 24 50-54' stroke='%2310b981' stroke-width='14' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
 
     <style>
-        :root {
+        :root, [data-theme="midnight"] {
             --bg-primary: #0f172a;
             --bg-card: #1e293b;
-            --bg-hover: #334155;
+            --bg-elevated: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
             --accent: #38bdf8;
-            --accent-hover: #0284c7;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --radius: 16px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+            --cat-salud: #10b981;
+            --cat-trabajo: #38bdf8;
+            --cat-estudios: #a855f7;
+            --cat-creatividad: #f59e0b;
+            --steps-grad: linear-gradient(90deg, #10b981, #38bdf8);
+        }
+
+        [data-theme="forest"] {
+            --bg-primary: #061814;
+            --bg-card: #0f2922;
+            --bg-elevated: #183d33;
+            --text-main: #ecfdf5;
+            --text-muted: #6ee7b7;
+            --border-color: #1e4d40;
+            --accent: #34d399;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --steps-grad: linear-gradient(90deg, #10b981, #a7f3d0);
+        }
+
+        [data-theme="cyber"] {
+            --bg-primary: #090514;
+            --bg-card: #160d29;
+            --bg-elevated: #271745;
+            --text-main: #fdf4ff;
+            --text-muted: #c084fc;
+            --border-color: #3b2166;
+            --accent: #f472b6;
+            --success: #2dd4bf;
+            --warning: #facc15;
+            --danger: #fb7185;
+            --steps-grad: linear-gradient(90deg, #f472b6, #2dd4bf);
         }
 
         [data-theme="light"] {
             --bg-primary: #f1f5f9;
             --bg-card: #ffffff;
-            --bg-hover: #e2e8f0;
+            --bg-elevated: #e2e8f0;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
+            --border-color: #cbd5e1;
             --accent: #0284c7;
-            --accent-hover: #0369a1;
             --success: #059669;
             --warning: #d97706;
             --danger: #dc2626;
-            --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            --steps-grad: linear-gradient(90deg, #059669, #0284c7);
         }
 
         * {
@@ -58,77 +88,138 @@
             background-color: var(--bg-primary);
             color: var(--text-main);
             min-height: 100vh;
-            padding: calc(env(safe-area-inset-top, 20px) + 16px) 20px calc(env(safe-area-inset-bottom, 20px) + 24px) 20px;
-            transition: background-color 0.25s ease, color 0.25s ease;
+            padding: calc(env(safe-area-inset-top, 14px) + 10px) 12px calc(env(safe-area-inset-bottom, 20px) + 82px) 12px;
             user-select: none;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .container {
-            max-width: 1120px;
+            max-width: 980px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
         }
 
-        /* Encabezado */
-        header {
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.28);
+        }
+
+        /* Cabecera Principal y Controles estilo Google Calendar */
+        .top-header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 14px;
-            background: var(--bg-card);
-            padding: 18px 24px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            gap: 10px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--success));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: #fff;
+        .title-group h1 {
+            font-size: 1.25rem;
             font-weight: 800;
-        }
-
-        .brand-text h1 {
-            font-size: 1.35rem;
-            font-weight: 700;
             letter-spacing: -0.02em;
         }
 
-        .brand-text p {
-            font-size: 0.85rem;
+        .title-group p {
+            font-size: 0.78rem;
             color: var(--text-muted);
+            text-transform: capitalize;
         }
 
-        .header-actions {
+        .calendar-toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 16px;
         }
 
-        button, .btn {
-            background: var(--bg-hover);
+        .nav-date-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            background: var(--bg-elevated);
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 9px 14px;
+            padding: 7px 11px;
             border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+        }
+
+        .period-label {
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-left: 4px;
+            text-transform: capitalize;
+        }
+
+        .scale-switcher {
+            display: flex;
+            background: var(--bg-primary);
+            padding: 3px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .scale-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 9px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .scale-btn.active {
+            background: var(--accent);
+            color: #0f172a;
+        }
+
+        [data-theme="light"] .scale-btn.active {
+            color: #ffffff;
+        }
+
+        /* Solapas de Categoría */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-tab {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            border: 1.5px solid var(--border-color);
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            white-space: nowrap;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -136,456 +227,757 @@
             transition: all 0.15s ease;
         }
 
-        button:hover, .btn:hover {
+        .cat-tab.active {
+            color: var(--text-main);
             border-color: var(--accent);
+            background: var(--bg-elevated);
         }
 
-        button:active {
-            transform: scale(0.97);
+        .cat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* KPIs Resumen */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .kpi-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .kpi-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .kpi-lbl {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        /* Módulo de Salud: Pasos y Running */
+        .steps-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .steps-bar-track {
+            width: 100%;
+            height: 14px;
+            background: var(--bg-primary);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 8px;
+        }
+
+        .steps-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--steps-grad);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .chips-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chip {
+            background: var(--bg-elevated);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 4px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .chip.km {
+            color: var(--accent);
+        }
+
+        .auto-badge {
+            margin-top: 8px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(16, 185, 129, 0.14);
+            color: var(--success);
+            display: none;
+        }
+
+        /* Formulario Agregar Hábito */
+        .add-habit-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .add-habit-bar input, .add-habit-bar select {
+            background: var(--bg-primary);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .add-habit-bar input {
+            flex: 1;
+            min-width: 180px;
         }
 
         .btn-primary {
             background: var(--accent);
             color: #0f172a;
-            border-color: transparent;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
         }
 
         [data-theme="light"] .btn-primary {
-            color: #ffffff;
+            color: #fff;
         }
 
-        /* Tarjetas de Resumen (KPIs) */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .kpi-card {
-            background: var(--bg-card);
-            padding: 18px 20px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+        /* 1. VISTA SEMANAL (Tarjetas móviles / Filas) */
+        .week-habit-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 10px;
         }
 
-        .kpi-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .kpi-value {
-            font-size: 1.9rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .kpi-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Matriz Semanal de Hábitos */
-        .card {
-            background: var(--bg-card);
-            padding: 22px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-        }
-
-        .card-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .add-habit-form {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-            max-width: 420px;
-        }
-
-        .add-habit-form input {
-            flex: 1;
+        .habit-week-card {
             background: var(--bg-primary);
-            color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 10px;
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .habit-week-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habit-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.9rem;
-            outline: none;
-        }
-
-        .add-habit-form input:focus {
-            border-color: var(--accent);
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 650px;
-        }
-
-        th, td {
-            padding: 12px 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th:first-child, td:first-child {
-            text-align: left;
-            padding-left: 4px;
-            min-width: 240px;
-        }
-
-        th {
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--text-muted);
             font-weight: 700;
         }
 
-        th.today-col {
-            color: var(--accent);
+        .streak-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--bg-card);
+            color: var(--text-muted);
         }
 
-        .habit-name-cell {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
+        .streak-pill.active {
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.15);
         }
 
-        .delete-btn {
+        .del-btn {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 1rem;
-            padding: 4px 8px;
-            border-radius: 6px;
-            opacity: 0.6;
-        }
-
-        .delete-btn:hover {
-            opacity: 1;
-            color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        /* Botón de check táctil para iPad */
-        .check-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 11px;
-            border: 2px solid var(--border-color);
-            background: var(--bg-primary);
-            color: transparent;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            font-weight: 800;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 0;
+            padding: 2px 6px;
         }
 
-        .check-btn.completed {
+        .week-pills-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .day-btn {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 7px 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .day-btn.is-today {
+            border-color: var(--accent);
+        }
+
+        .day-btn.done {
             background: var(--success);
             border-color: var(--success);
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
         }
 
-        .streak-badge {
+        .day-btn-lbl {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .day-btn-num {
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        /* 2A. VISTA MENSUAL - MODO TABLA (Filas 1 al 31) */
+        .month-table-scroll {
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .month-matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .month-matrix-table th, .month-matrix-table td {
+            padding: 6px 3px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.72rem;
+        }
+
+        .month-matrix-table th:first-child,
+        .month-matrix-table td:first-child {
+            position: sticky;
+            left: 0;
+            background: var(--bg-card);
+            z-index: 3;
+            text-align: left;
+            min-width: 170px;
+            max-width: 200px;
+            padding-left: 6px;
+            padding-right: 8px;
+            font-weight: 700;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .mini-day-cell {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: transparent;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            background: var(--bg-primary);
-            color: var(--text-muted);
+            justify-content: center;
         }
 
-        .streak-badge.active {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
+        .mini-day-cell.is-today {
+            border: 1.5px solid var(--accent);
         }
 
-        /* Sección de Gráficos */
-        .charts-grid {
+        .mini-day-cell.done {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+
+        /* 2B. VISTA MENSUAL - MODO CALENDARIO (7 Columnas tipo Google Calendar) */
+        .gcal-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 8px;
         }
 
-        /* Gráfico de Barras Semanal */
-        .bar-chart-container {
-            position: relative;
-            height: 230px;
+        .gcal-weekday-head {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding-bottom: 4px;
+        }
+
+        .gcal-day-box {
+            min-height: 64px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .gcal-day-box.empty {
+            background: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+
+        .gcal-day-box.is-today {
+            border: 2px solid var(--accent);
+        }
+
+        .gcal-day-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .gcal-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 4px;
+        }
+
+        .gcal-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        /* 3. VISTA ANUAL (12 Meses) */
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .year-month-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .year-month-card:hover {
+            border-color: var(--accent);
+        }
+
+        .year-month-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            text-transform: capitalize;
+        }
+
+        .mini-month-dots {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .mini-dot-cell {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: var(--bg-card);
+        }
+
+        .mini-dot-cell.l1 { background: rgba(16, 185, 129, 0.3); }
+        .mini-dot-cell.l2 { background: rgba(16, 185, 129, 0.65); }
+        .mini-dot-cell.l3 { background: var(--success); }
+
+        /* Gráfico de Barras Inferior */
+        .chart-box {
+            height: 170px;
             display: flex;
             align-items: flex-end;
-            justify-content: space-around;
-            padding: 28px 10px 32px 10px;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 22px 4px 24px 4px;
             border-bottom: 1px solid var(--border-color);
+            position: relative;
             margin-top: 10px;
         }
 
-        .threshold-line {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: calc(32px + (170px * 0.75));
-            border-top: 2px dashed var(--warning);
-            opacity: 0.75;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .threshold-label {
-            position: absolute;
-            right: 4px;
-            top: -20px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--warning);
-            background: var(--bg-card);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .bar-col {
+        .chart-col {
+            flex: 1;
+            height: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            height: 170px;
-            width: 12%;
             position: relative;
-            z-index: 2;
         }
 
-        .bar-pct {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .bar-fill {
+        .chart-bar {
             width: 100%;
-            max-width: 38px;
-            border-radius: 8px 8px 4px 4px;
+            max-width: 26px;
             background: var(--accent);
-            transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s;
-            min-height: 6px;
+            border-radius: 5px 5px 2px 2px;
+            min-height: 3px;
+            transition: height 0.25s ease;
         }
 
-        .bar-fill.goal-met {
+        .chart-bar.high {
             background: var(--success);
         }
 
-        .bar-day {
+        .chart-lbl {
             position: absolute;
-            bottom: -26px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            bottom: -20px;
+            font-size: 0.62rem;
             color: var(--text-muted);
+            font-weight: 700;
         }
 
-        /* Barras Horizontales por Hábito */
-        .habit-progress-list {
+        .chart-val {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        /* Navegación Inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px calc(env(safe-area-inset-bottom, 10px) + 6px) 16px;
             display: flex;
+            justify-content: space-around;
+            z-index: 40;
+        }
+
+        .b-nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .b-nav-btn.active {
+            color: var(--accent);
+        }
+
+        .main-tab-section {
+            display: none;
             flex-direction: column;
             gap: 14px;
-            margin-top: 10px;
         }
 
-        .habit-progress-item {
+        .main-tab-section.active {
+            display: flex;
+        }
+
+        /* Modal para editar día en Vista Calendario Mensual */
+        .day-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+        }
+
+        .day-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 18px;
+            width: 100%;
+            max-width: 400px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-        }
-
-        .habit-progress-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.86rem;
-            font-weight: 600;
-        }
-
-        .habit-progress-track {
-            width: 100%;
-            height: 10px;
-            background: var(--bg-primary);
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .habit-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            border-radius: 999px;
-            transition: width 0.35s ease;
-        }
-
-        @media (max-width: 640px) {
-            body {
-                padding: 14px;
-            }
-            header {
-                padding: 14px 16px;
-            }
-            .card {
-                padding: 16px;
-            }
+            gap: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Encabezado -->
-        <header>
-            <div class="brand">
-                <div class="brand-icon">✓</div>
-                <div class="brand-text">
-                    <h1>Panel de Hábitos y Rachas</h1>
-                    <p id="currentDateLabel">Seguimiento semanal interactivo</p>
-                </div>
+        <header class="top-header">
+            <div class="title-group">
+                <h1>Panel de Hábitos</h1>
+                <p id="liveTodayText">Cargando fecha...</p>
             </div>
-            <div class="header-actions">
-                <button type="button" onclick="toggleTheme()" id="themeBtn">☀️ Tema</button>
-                <button type="button" onclick="exportBackup()">⬇️ Backup JSON</button>
-                <button type="button" onclick="document.getElementById('importFile').click()">⬆️ Importar</button>
-                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)">
-                <button type="button" onclick="resetWeek()">🔄 Reiniciar Semana</button>
+            <div class="streak-pill active" id="bestStreakBadge" style="font-size:0.82rem; padding:6px 12px;">
+                🔥 Mejor racha: 0 d
             </div>
         </header>
 
-        <!-- Indicadores de Resumen (KPIs) -->
-        <section class="kpi-grid">
-            <div class="kpi-card">
-                <span class="kpi-label">Cumplimiento de Hoy</span>
-                <span class="kpi-value" id="kpiToday">0%</span>
-                <span class="kpi-sub" id="kpiTodaySub">0 de 0 completados</span>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-label">Consistencia Semanal</span>
-                <span class="kpi-value" id="kpiWeek">0%</span>
-                <span class="kpi-sub" id="kpiWeekSub">Meta recomendada: ≥ 75%</span>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-label">Mejor Racha Activa</span>
-                <span class="kpi-value" id="kpiBestStreak">0 días</span>
-                <span class="kpi-sub" id="kpiBestHabit">Sin racha activa aún</span>
-            </div>
-        </section>
-
-        <!-- Matriz de Hábitos -->
-        <section class="card">
-            <div class="card-header">
-                <h2 class="card-title">Registro Diario (Lunes a Domingo)</h2>
-                <form class="add-habit-form" onsubmit="addHabit(event)">
-                    <input type="text" id="newHabitInput" placeholder="Nuevo hábito diario..." required maxlength="60">
-                    <button type="submit" class="btn-primary">+ Agregar</button>
-                </form>
-            </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr id="tableHeadRow">
-                            <th>Hábito</th>
-                            <th>Lun</th>
-                            <th>Mar</th>
-                            <th>Mié</th>
-                            <th>Jue</th>
-                            <th>Vie</th>
-                            <th>Sáb</th>
-                            <th>Dom</th>
-                            <th>Racha</th>
-                        </tr>
-                    </thead>
-                    <tbody id="habitTableBody"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Gráficos Semanales -->
-        <section class="charts-grid">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Consistencia Diaria (%)</h2>
+        <!-- SECCIÓN PRINCIPAL: CALENDARIO Y MATRIZ -->
+        <div id="sec-panel" class="main-tab-section active">
+            <!-- Barra de Calendario (Semana / Mes / Año) -->
+            <div class="calendar-toolbar">
+                <div class="nav-date-controls">
+                    <button type="button" class="icon-btn" onclick="navigatePeriod(-1)">◀</button>
+                    <button type="button" class="icon-btn" onclick="goToday()">Hoy</button>
+                    <button type="button" class="icon-btn" onclick="navigatePeriod(1)">▶</button>
+                    <span class="period-label" id="currentPeriodLabel">Octubre 2026</span>
                 </div>
-                <div class="bar-chart-container" id="dailyBarChart">
-                    <div class="threshold-line">
-                        <span class="threshold-label">Meta 75%</span>
+
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <!-- Sub-selector exclusivo para Vista Mensual -->
+                    <div class="scale-switcher" id="monthSubSwitcher" style="display:none;">
+                        <button type="button" class="scale-btn active" id="btnMonthTable" onclick="setMonthMode('table')">📋 Tabla 1-31</button>
+                        <button type="button" class="scale-btn" id="btnMonthGrid" onclick="setMonthMode('grid')">🗓️ Calendario</button>
+                    </div>
+
+                    <!-- Selector Principal Semana / Mes / Año -->
+                    <div class="scale-switcher">
+                        <button type="button" class="scale-btn" id="scaleWeekBtn" onclick="setScale('week')">Semana</button>
+                        <button type="button" class="scale-btn active" id="scaleMonthBtn" onclick="setScale('month')">Mes</button>
+                        <button type="button" class="scale-btn" id="scaleYearBtn" onclick="setScale('year')">Año</button>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Efectividad y Racha por Hábito</h2>
-                </div>
-                <div class="habit-progress-list" id="habitProgressList"></div>
+            <!-- Solapas Temáticas -->
+            <div class="category-tabs">
+                <button type="button" class="cat-tab active" onclick="setCategory('todas', this)">
+                    ✨ Todas
+                </button>
+                <button type="button" class="cat-tab" onclick="setCategory('salud', this)">
+                    <span class="cat-dot" style="background:var(--cat-salud)"></span> 🏃 Salud
+                </button>
+                <button type="button" class="cat-tab" onclick="setCategory('trabajo', this)">
+                    <span class="cat-dot" style="background:var(--cat-trabajo)"></span> 💼 Trabajo
+                </button>
+                <button type="button" class="cat-tab" onclick="setCategory('estudios', this)">
+                    <span class="cat-dot" style="background:var(--cat-estudios)"></span> 📚 Estudios
+                </button>
+                <button type="button" class="cat-tab" onclick="setCategory('creatividad', this)">
+                    <span class="cat-dot" style="background:var(--cat-creatividad)"></span> 🎨 Creatividad
+                </button>
             </div>
-        </section>
+
+            <!-- KPIs de la Solapa Activa -->
+            <div class="kpi-row">
+                <div class="kpi-box">
+                    <span class="kpi-val" id="kpiTodayVal">0%</span>
+                    <span class="kpi-lbl">Cumplido Hoy</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-val" id="kpiPeriodVal">0%</span>
+                    <span class="kpi-lbl" id="kpiPeriodLbl">Promedio Mes</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-val" id="kpiTotalHabits">0</span>
+                    <span class="kpi-lbl">Hábitos en Solapa</span>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Salud: Barra de Pasos Diarios y Running -->
+            <section class="card" id="healthStepsCard">
+                <div class="steps-top">
+                    <span style="font-size:0.9rem; font-weight:800;">👟 Pasos y Running de Hoy</span>
+                    <span style="font-size:1rem; font-weight:800; color:var(--accent);" id="stepsCounterText">0 / 8.000</span>
+                </div>
+                <div class="steps-bar-track">
+                    <div class="steps-bar-fill" id="stepsProgressBar"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
+                    <span id="stepsPctLabel">0% de la meta diaria</span>
+                    <span id="kmTodayLabel">🏃 0.0 km hoy</span>
+                </div>
+                <div class="chips-row">
+                    <button type="button" class="chip" onclick="updateSteps(500)">+500 p</button>
+                    <button type="button" class="chip" onclick="updateSteps(1000)">+1k p</button>
+                    <button type="button" class="chip" onclick="updateSteps(3000)">+3k p</button>
+                    <button type="button" class="chip" onclick="askExactSteps()">✏️ Exacto</button>
+                </div>
+                <div class="chips-row">
+                    <button type="button" class="chip km" onclick="updateKm(1)">+1 km</button>
+                    <button type="button" class="chip km" onclick="updateKm(3)">+3 km</button>
+                    <button type="button" class="chip km" onclick="updateKm(5)">+5 km</button>
+                    <button type="button" class="chip" onclick="resetTodaySteps()">↺ Cero</button>
+                </div>
+                <div class="auto-badge" id="autoCheckBanner">
+                    ✓ ¡Meta de movimiento superada! Hábito de Salud marcado automáticamente hoy.
+                </div>
+            </section>
+
+            <!-- Creador de Hábitos para ir agregando a medida que se usa -->
+            <form class="card add-habit-bar" onsubmit="createNewHabit(event)">
+                <input type="text" id="habitNameInput" placeholder="Agregar nuevo hábito a tu medida..." required maxlength="60">
+                <select id="habitCatSelect">
+                    <option value="salud">🏃 Salud</option>
+                    <option value="trabajo">💼 Trabajo</option>
+                    <option value="estudios">📚 Estudios</option>
+                    <option value="creatividad">🎨 Creatividad</option>
+                </select>
+                <button type="submit" class="btn-primary">+ Agregar</button>
+            </form>
+
+            <!-- Contenedor Dinámico de la Matriz (Semana / Mes Tabla / Mes Grilla / Año) -->
+            <section class="card" id="matrixMainContainer"></section>
+
+            <!-- Gráfico Dinámico Inferior -->
+            <section class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 style="font-size:0.95rem; font-weight:800;" id="chartSectionTitle">📊 Evolución del Período</h2>
+                    <span style="font-size:0.75rem; color:var(--text-muted);" id="chartSectionSub">Porcentaje diario</span>
+                </div>
+                <div class="chart-box" id="dynamicChartBox"></div>
+            </section>
+        </div>
+
+        <!-- SECCIÓN AJUSTES Y PERSONALIZACIÓN -->
+        <div id="sec-settings" class="main-tab-section">
+            <div class="card">
+                <h2 style="font-size:1rem; font-weight:800; margin-bottom:10px;">🎨 Tema de Colores</h2>
+                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+                    <button type="button" class="chip" style="padding:12px;" onclick="changeTheme('midnight')">🌌 Azul Noche</button>
+                    <button type="button" class="chip" style="padding:12px;" onclick="changeTheme('forest')">🌲 Verde Bosque</button>
+                    <button type="button" class="chip" style="padding:12px;" onclick="changeTheme('cyber')">⚡ Cyberpunk Neón</button>
+                    <button type="button" class="chip" style="padding:12px;" onclick="changeTheme('light')">☀️ Claro Papel</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="font-size:1rem; font-weight:800; margin-bottom:8px;">🎯 Meta Diaria de Pasos</h2>
+                <div class="add-habit-bar">
+                    <input type="number" id="goalInput" placeholder="8000" min="1000" step="500">
+                    <button type="button" class="btn-primary" onclick="updateStepGoal()">Guardar Meta</button>
+                </div>
+            </div>
+
+            <div class="card" style="display:flex; flex-direction:column; gap:8px;">
+                <h2 style="font-size:1rem; font-weight:800; margin-bottom:4px;">💾 Gestión de Datos y Backup</h2>
+                <button type="button" class="chip" style="padding:12px;" onclick="exportBackupJson()">⬇️ Exportar Backup JSON</button>
+                <button type="button" class="chip" style="padding:12px;" onclick="document.getElementById('fileImport').click()">⬆️ Importar Backup JSON</button>
+                <input type="file" id="fileImport" accept=".json" style="display:none;" onchange="importBackupJson(event)">
+                <button type="button" class="chip" style="padding:12px; color:var(--warning);" onclick="clearAllHabitsZero()">🗑️ Vaciar hábitos de ejemplo (Empezar de 0)</button>
+            </div>
+        </div>
     </div>
 
+    <!-- Modal emergente al tocar un día en el Modo Calendario Mensual -->
+    <div class="day-modal-backdrop" id="dayModalBackdrop" onclick="closeDayModal(event)">
+        <div class="day-modal" onclick="event.stopPropagation()">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="font-size:1rem; font-weight:800;" id="modalDateTitle">Hábitos del día</h3>
+                <button type="button" class="del-btn" onclick="document.getElementById('dayModalBackdrop').style.display='none'">✕</button>
+            </div>
+            <div id="modalHabitsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+    </div>
+
+    <!-- Barra de Navegación Inferior -->
+    <nav class="bottom-nav">
+        <button type="button" class="b-nav-btn active" onclick="switchMainSection('panel', this)">
+            <span style="font-size:1.2rem;">🗓️</span>
+            <span>Calendario y Hábitos</span>
+        </button>
+        <button type="button" class="b-nav-btn" onclick="switchMainSection('settings', this)">
+            <span style="font-size:1.2rem;">⚙️</span>
+            <span>Ajustes y Temas</span>
+        </button>
+    </nav>
+
     <script>
-        const STORAGE_KEY = 'agustin_habits_tracker_v1';
+        const STORAGE_KEY = 'agustin_habits_gcal_v2';
         const THEME_KEY = 'agustin_habits_theme';
-        const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+        const WEEKDAYS_SHORT = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+        const MONTHS_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        const CAT_COLORS = {
+            salud: 'var(--cat-salud)',
+            trabajo: 'var(--cat-trabajo)',
+            estudios: 'var(--cat-estudios)',
+            creatividad: 'var(--cat-creatividad)'
+        };
 
         const defaultHabits = [
-            { id: 'h1', name: 'Bloque de estudio o lectura académica (45 min)', days: [false, false, false, false, false, false, false] },
-            { id: 'h2', name: 'Práctica técnica (SQL / QA testing - 30 min)', days: [false, false, false, false, false, false, false] },
-            { id: 'h3', name: 'Sesión creativa o bocetado digital (30 min)', days: [false, false, false, false, false, false, false] },
-            { id: 'h4', name: 'Movimiento físico o caminata (30 min)', days: [false, false, false, false, false, false, false] },
-            { id: 'h5', name: 'Hidratación completa (2 litros de agua)', days: [false, false, false, false, false, false, false] },
-            { id: 'h6', name: 'Desconexión de pantallas 1 hora antes de dormir', days: [false, false, false, false, false, false, false] }
+            { id: 'h_sal_1', name: 'Movimiento físico o caminata (30 min)', category: 'salud', logs: {} },
+            { id: 'h_sal_2', name: 'Hidratación completa (2 litros de agua)', category: 'salud', logs: {} },
+            { id: 'h_sal_3', name: 'Desconexión de pantallas 1h antes de dormir', category: 'salud', logs: {} },
+            { id: 'h_tra_1', name: 'Organización de tareas y bandeja de entrada', category: 'trabajo', logs: {} },
+            { id: 'h_est_1', name: 'Bloque de estudio o lectura académica (45 min)', category: 'estudios', logs: {} },
+            { id: 'h_est_2', name: 'Práctica técnica (SQL / QA testing - 30 min)', category: 'estudios', logs: {} },
+            { id: 'h_cre_1', name: 'Sesión creativa o bocetado digital (30 min)', category: 'creatividad', logs: {} }
         ];
 
         let state = {
-            habits: []
+            habits: [],
+            stepGoal: 8000,
+            stepsByDate: {},
+            kmByDate: {}
         };
 
-        // Obtener índice del día actual (0 = Lunes, 6 = Domingo)
-        function getTodayIndex() {
-            const jsDay = new Date().getDay(); // 0 es Domingo
-            return jsDay === 0 ? 6 : jsDay - 1;
+        // Estado de navegación tipo Google Calendar
+        let ui = {
+            scale: 'month',       // 'week' | 'month' | 'year'
+            monthMode: 'table',   // 'table' (1-31) | 'grid' (7 col)
+            category: 'todas',    // 'todas' | 'salud' | 'trabajo' | 'estudios' | 'creatividad'
+            cursorDate: new Date()
+        };
+
+        function formatDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
         }
 
-        function loadData() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
+        const TODAY_KEY = formatDateKey(new Date());
+
+        function loadState() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
                 try {
-                    state = JSON.parse(saved);
+                    const parsed = JSON.parse(raw);
+                    state.habits = Array.isArray(parsed.habits) ? parsed.habits : JSON.parse(JSON.stringify(defaultHabits));
+                    state.stepGoal = parsed.stepGoal || 8000;
+                    state.stepsByDate = parsed.stepsByDate || {};
+                    state.kmByDate = parsed.kmByDate || {};
                 } catch (e) {
                     state.habits = JSON.parse(JSON.stringify(defaultHabits));
                 }
@@ -593,273 +985,648 @@
                 state.habits = JSON.parse(JSON.stringify(defaultHabits));
             }
 
-            const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+            const savedTheme = localStorage.getItem(THEME_KEY) || 'midnight';
             document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeBtn(savedTheme);
+            document.getElementById('goalInput').value = state.stepGoal;
         }
 
-        function saveData() {
+        function saveState() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
 
-        // Calcula la racha más larga o activa dentro de la semana
-        function calculateStreak(daysArray) {
-            let current = 0;
-            let maxStreak = 0;
-            for (let i = 0; i < daysArray.length; i++) {
-                if (daysArray[i]) {
-                    current++;
-                    if (current > maxStreak) maxStreak = current;
-                } else {
-                    current = 0;
-                }
+        // Lee parámetros ?pasos=8000&km=4.2 si se abre desde la app Atajos
+        function checkShortcutsUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const p = params.get('pasos');
+            const k = params.get('km');
+            let changed = false;
+
+            if (p !== null && !isNaN(parseInt(p))) {
+                state.stepsByDate[TODAY_KEY] = Math.max(0, parseInt(p));
+                changed = true;
             }
-            return maxStreak;
+            if (k !== null && !isNaN(parseFloat(k))) {
+                state.kmByDate[TODAY_KEY] = Math.max(0, parseFloat(k));
+                changed = true;
+            }
+            if (changed) {
+                syncMovementAutoHabit();
+                saveState();
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
 
-        function toggleDay(habitId, dayIndex) {
-            const habit = state.habits.find(h => h.id === habitId);
-            if (!habit) return;
-            habit.days[dayIndex] = !habit.days[dayIndex];
-            saveData();
-            render();
+        function syncMovementAutoHabit() {
+            const steps = state.stepsByDate[TODAY_KEY] || 0;
+            const km = state.kmByDate[TODAY_KEY] || 0;
+            const banner = document.getElementById('autoCheckBanner');
+
+            if (steps >= state.stepGoal || km >= 3) {
+                const moveHabit = state.habits.find(h =>
+                    h.category === 'salud' && (
+                        h.name.toLowerCase().includes('movimiento') ||
+                        h.name.toLowerCase().includes('caminata') ||
+                        h.name.toLowerCase().includes('running') ||
+                        h.name.toLowerCase().includes('físico')
+                    )
+                );
+                if (moveHabit) {
+                    moveHabit.logs[TODAY_KEY] = true;
+                }
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
         }
 
-        function addHabit(event) {
-            event.preventDefault();
-            const input = document.getElementById('newHabitInput');
+        function updateSteps(delta) {
+            state.stepsByDate[TODAY_KEY] = Math.max(0, (state.stepsByDate[TODAY_KEY] || 0) + delta);
+            syncMovementAutoHabit();
+            saveState();
+            renderAll();
+        }
+
+        function askExactSteps() {
+            const val = prompt('Pasos totales de hoy:', state.stepsByDate[TODAY_KEY] || 0);
+            if (val === null) return;
+            const n = parseInt(val);
+            if (!isNaN(n) && n >= 0) {
+                state.stepsByDate[TODAY_KEY] = n;
+                syncMovementAutoHabit();
+                saveState();
+                renderAll();
+            }
+        }
+
+        function updateKm(delta) {
+            const curr = state.kmByDate[TODAY_KEY] || 0;
+            state.kmByDate[TODAY_KEY] = Math.round((curr + delta) * 10) / 10;
+            syncMovementAutoHabit();
+            saveState();
+            renderAll();
+        }
+
+        function resetTodaySteps() {
+            state.stepsByDate[TODAY_KEY] = 0;
+            state.kmByDate[TODAY_KEY] = 0;
+            syncMovementAutoHabit();
+            saveState();
+            renderAll();
+        }
+
+        function setScale(newScale) {
+            ui.scale = newScale;
+            document.getElementById('scaleWeekBtn').classList.toggle('active', newScale === 'week');
+            document.getElementById('scaleMonthBtn').classList.toggle('active', newScale === 'month');
+            document.getElementById('scaleYearBtn').classList.toggle('active', newScale === 'year');
+            document.getElementById('monthSubSwitcher').style.display = (newScale === 'month') ? 'flex' : 'none';
+            renderAll();
+        }
+
+        function setMonthMode(mode) {
+            ui.monthMode = mode;
+            document.getElementById('btnMonthTable').classList.toggle('active', mode === 'table');
+            document.getElementById('btnMonthGrid').classList.toggle('active', mode === 'grid');
+            renderAll();
+        }
+
+        function setCategory(cat, btnEl) {
+            ui.category = cat;
+            document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+            btnEl.classList.add('active');
+
+            if (cat !== 'todas') {
+                document.getElementById('habitCatSelect').value = cat;
+            }
+            document.getElementById('healthStepsCard').style.display =
+                (cat === 'todas' || cat === 'salud') ? 'block' : 'none';
+
+            renderAll();
+        }
+
+        function navigatePeriod(dir) {
+            const d = new Date(ui.cursorDate);
+            if (ui.scale === 'week') {
+                d.setDate(d.getDate() + (dir * 7));
+            } else if (ui.scale === 'month') {
+                d.setMonth(d.getMonth() + dir);
+            } else {
+                d.setFullYear(d.getFullYear() + dir);
+            }
+            ui.cursorDate = d;
+            renderAll();
+        }
+
+        function goToday() {
+            ui.cursorDate = new Date();
+            renderAll();
+        }
+
+        function toggleHabitLog(habitId, dateKey) {
+            const h = state.habits.find(item => item.id === habitId);
+            if (!h) return;
+            h.logs[dateKey] = !h.logs[dateKey];
+            saveState();
+            renderAll();
+        }
+
+        function createNewHabit(e) {
+            e.preventDefault();
+            const input = document.getElementById('habitNameInput');
+            const select = document.getElementById('habitCatSelect');
             const name = input.value.trim();
             if (!name) return;
 
             state.habits.push({
                 id: 'h_' + Date.now(),
                 name: name,
-                days: [false, false, false, false, false, false, false]
+                category: select.value,
+                logs: {}
             });
             input.value = '';
-            saveData();
-            render();
+            saveState();
+            renderAll();
         }
 
-        function deleteHabit(habitId) {
-            if (!confirm('¿Eliminar este hábito de la lista?')) return;
-            state.habits = state.habits.filter(h => h.id !== habitId);
-            saveData();
-            render();
+        function removeHabit(id) {
+            if (!confirm('¿Eliminar este hábito?')) return;
+            state.habits = state.habits.filter(h => h.id !== id);
+            saveState();
+            renderAll();
         }
 
-        function resetWeek() {
-            if (!confirm('¿Reiniciar todas las casillas de la semana a cero?')) return;
-            state.habits.forEach(h => {
-                h.days = [false, false, false, false, false, false, false];
+        function clearAllHabitsZero() {
+            if (!confirm('¿Seguro que querés borrar todos los hábitos cargados para empezar tu lista desde cero?')) return;
+            state.habits = [];
+            saveState();
+            renderAll();
+            alert('Lista vacía. Ya podés ir agregando tus propios hábitos por solapa.');
+        }
+
+        function calculateActiveStreak(habit) {
+            let streak = 0;
+            const checkDate = new Date();
+            for (let i = 0; i < 365; i++) {
+                const key = formatDateKey(checkDate);
+                if (habit.logs[key]) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+            return streak;
+        }
+
+        function getFilteredHabits() {
+            if (ui.category === 'todas') return state.habits;
+            return state.habits.filter(h => h.category === ui.category);
+        }
+
+        function getMondayOfWeek(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        function renderAll() {
+            const filtered = getFilteredHabits();
+
+            // 1. Renderizar barra de pasos
+            const stepsToday = state.stepsByDate[TODAY_KEY] || 0;
+            const kmToday = state.kmByDate[TODAY_KEY] || 0;
+            const stepPct = Math.min(100, Math.round((stepsToday / state.stepGoal) * 100));
+            document.getElementById('stepsCounterText').textContent =
+                `${stepsToday.toLocaleString('es-AR')} / ${state.stepGoal.toLocaleString('es-AR')}`;
+            document.getElementById('stepsProgressBar').style.width = `${stepPct}%`;
+            document.getElementById('stepsPctLabel').textContent = `${stepPct}% de la meta diaria`;
+            document.getElementById('kmTodayLabel').textContent = `🏃 ${kmToday.toFixed(1)} km hoy`;
+
+            // 2. KPI Hoy y Mejor Racha
+            let doneToday = 0;
+            let bestStreak = 0;
+            filtered.forEach(h => {
+                if (h.logs[TODAY_KEY]) doneToday++;
+                const s = calculateActiveStreak(h);
+                if (s > bestStreak) bestStreak = s;
             });
-            saveData();
-            render();
+
+            const todayPct = filtered.length > 0 ? Math.round((doneToday / filtered.length) * 100) : 0;
+            document.getElementById('kpiTodayVal').textContent = `${todayPct}%`;
+            document.getElementById('kpiTotalHabits').textContent = filtered.length;
+            document.getElementById('bestStreakBadge').textContent = `🔥 Mejor racha: ${bestStreak} d`;
+
+            document.getElementById('monthSubSwitcher').style.display = (ui.scale === 'month') ? 'flex' : 'none';
+
+            // 3. Renderizar según escala (Semana / Mes / Año)
+            if (ui.scale === 'week') {
+                renderWeekView(filtered);
+            } else if (ui.scale === 'month') {
+                renderMonthView(filtered);
+            } else {
+                renderYearView(filtered);
+            }
         }
 
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem(THEME_KEY, next);
-            updateThemeBtn(next);
+        function renderWeekView(habits) {
+            const monday = getMondayOfWeek(ui.cursorDate);
+            const weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                weekDates.push(d);
+            }
+
+            const firstD = weekDates[0];
+            const lastD = weekDates[6];
+            document.getElementById('currentPeriodLabel').textContent =
+                `${firstD.getDate()} ${MONTHS_NAMES[firstD.getMonth()].slice(0,3)} – ${lastD.getDate()} ${MONTHS_NAMES[lastD.getMonth()].slice(0,3)}`;
+
+            const container = document.getElementById('matrixMainContainer');
+            container.innerHTML = '';
+
+            if (habits.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:18px;">No hay hábitos en esta solapa todavía. Agregá uno arriba.</p>`;
+            } else {
+                const list = document.createElement('div');
+                list.className = 'week-habit-list';
+
+                habits.forEach(h => {
+                    const card = document.createElement('div');
+                    card.className = 'habit-week-card';
+                    const streak = calculateActiveStreak(h);
+
+                    const head = document.createElement('div');
+                    head.className = 'habit-week-head';
+                    head.innerHTML = `
+                        <div class="habit-name-wrap">
+                            <span class="cat-dot" style="background:${CAT_COLORS[h.category]}"></span>
+                            <span>${h.name}</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span class="streak-pill ${streak > 0 ? 'active' : ''}">🔥 ${streak}d</span>
+                            <button type="button" class="del-btn" onclick="removeHabit('${h.id}')">✕</button>
+                        </div>
+                    `;
+
+                    const pills = document.createElement('div');
+                    pills.className = 'week-pills-row';
+
+                    weekDates.forEach((dObj, idx) => {
+                        const dKey = formatDateKey(dObj);
+                        const done = !!h.logs[dKey];
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'day-btn' + (done ? ' done' : '') + (dKey === TODAY_KEY ? ' is-today' : '');
+                        btn.innerHTML = `<span class="day-btn-lbl">${WEEKDAYS_SHORT[idx]}</span><span class="day-btn-num">${done ? '✓' : dObj.getDate()}</span>`;
+                        btn.onclick = () => toggleHabitLog(h.id, dKey);
+                        pills.appendChild(btn);
+                    });
+
+                    card.appendChild(head);
+                    card.appendChild(pills);
+                    list.appendChild(card);
+                });
+                container.appendChild(list);
+            }
+
+            // Calcular KPI Semana y Gráfico Semanal
+            const chartBox = document.getElementById('dynamicChartBox');
+            chartBox.innerHTML = '';
+            let totalChecks = 0;
+
+            weekDates.forEach((dObj, idx) => {
+                const dKey = formatDateKey(dObj);
+                let dayDone = 0;
+                habits.forEach(h => { if (h.logs[dKey]) { dayDone++; totalChecks++; } });
+                const pct = habits.length > 0 ? Math.round((dayDone / habits.length) * 100) : 0;
+
+                const col = document.createElement('div');
+                col.className = 'chart-col';
+                col.innerHTML = `
+                    <span class="chart-val">${pct}%</span>
+                    <div class="chart-bar ${pct >= 75 ? 'high' : ''}" style="height:${Math.max(pct, 4)}%"></div>
+                    <span class="chart-lbl">${WEEKDAYS_SHORT[idx]}</span>
+                `;
+                chartBox.appendChild(col);
+            });
+
+            const weekPct = (habits.length * 7) > 0 ? Math.round((totalChecks / (habits.length * 7)) * 100) : 0;
+            document.getElementById('kpiPeriodLbl').textContent = 'Promedio Semana';
+            document.getElementById('kpiPeriodVal').textContent = `${weekPct}%`;
+            document.getElementById('chartSectionTitle').textContent = '📊 Consistencia Semanal';
         }
 
-        function updateThemeBtn(theme) {
-            const btn = document.getElementById('themeBtn');
-            btn.textContent = theme === 'dark' ? '☀️ Claro' : '🌙 Oscuro';
+        function renderMonthView(habits) {
+            const year = ui.cursorDate.getFullYear();
+            const month = ui.cursorDate.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            document.getElementById('currentPeriodLabel').textContent = `${MONTHS_NAMES[month]} ${year}`;
+            const container = document.getElementById('matrixMainContainer');
+            container.innerHTML = '';
+
+            if (habits.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:18px;">No hay hábitos en esta solapa todavía. Agregá uno arriba.</p>`;
+            } else if (ui.monthMode === 'table') {
+                // MODO 1: Tabla de Filas (Hábitos a la izquierda y días 1 al 31 a lo largo)
+                const scroll = document.createElement('div');
+                scroll.className = 'month-table-scroll';
+                const tbl = document.createElement('table');
+                tbl.className = 'month-matrix-table';
+
+                let theadHtml = `<thead><tr><th>Hábito (1–${daysInMonth})</th>`;
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    theadHtml += `<th style="${key === TODAY_KEY ? 'color:var(--accent); font-weight:900;' : ''}">${d}</th>`;
+                }
+                theadHtml += `<th>%</th></tr></thead>`;
+                tbl.innerHTML = theadHtml;
+
+                const tbody = document.createElement('tbody');
+                habits.forEach(h => {
+                    const tr = document.createElement('tr');
+                    const tdName = document.createElement('td');
+                    tdName.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:4px;">
+                            <span><span class="cat-dot" style="background:${CAT_COLORS[h.category]}"></span> ${h.name}</span>
+                            <button type="button" class="del-btn" onclick="removeHabit('${h.id}')">✕</button>
+                        </div>
+                    `;
+                    tr.appendChild(tdName);
+
+                    let countMonth = 0;
+                    for (let d = 1; d <= daysInMonth; d++) {
+                        const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                        const done = !!h.logs[key];
+                        if (done) countMonth++;
+
+                        const td = document.createElement('td');
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'mini-day-cell' + (done ? ' done' : '') + (key === TODAY_KEY ? ' is-today' : '');
+                        btn.textContent = '✓';
+                        btn.onclick = () => toggleHabitLog(h.id, key);
+                        td.appendChild(btn);
+                        tr.appendChild(td);
+                    }
+
+                    const tdPct = document.createElement('td');
+                    tdPct.style.fontWeight = '800';
+                    tdPct.style.color = 'var(--accent)';
+                    tdPct.textContent = `${Math.round((countMonth / daysInMonth) * 100)}%`;
+                    tr.appendChild(tdPct);
+                    tbody.appendChild(tr);
+                });
+
+                tbl.appendChild(tbody);
+                scroll.appendChild(tbl);
+                container.appendChild(scroll);
+            } else {
+                // MODO 2: Grilla de 7 Columnas estilo Google Calendar
+                const grid = document.createElement('div');
+                grid.className = 'gcal-grid';
+
+                WEEKDAYS_SHORT.forEach(w => {
+                    const head = document.createElement('div');
+                    head.className = 'gcal-weekday-head';
+                    head.textContent = w;
+                    grid.appendChild(head);
+                });
+
+                const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
+                for (let e = 0; e < firstDayIndex; e++) {
+                    const empty = document.createElement('div');
+                    empty.className = 'gcal-day-box empty';
+                    grid.appendChild(empty);
+                }
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const box = document.createElement('div');
+                    box.className = 'gcal-day-box' + (key === TODAY_KEY ? ' is-today' : '');
+
+                    let doneCount = 0;
+                    const dotsWrap = document.createElement('div');
+                    dotsWrap.className = 'gcal-dots';
+
+                    habits.forEach(h => {
+                        if (h.logs[key]) {
+                            doneCount++;
+                            const dot = document.createElement('span');
+                            dot.className = 'gcal-dot';
+                            dot.style.background = CAT_COLORS[h.category];
+                            dotsWrap.appendChild(dot);
+                        }
+                    });
+
+                    const pct = habits.length > 0 ? Math.round((doneCount / habits.length) * 100) : 0;
+                    box.innerHTML = `
+                        <div class="gcal-day-top">
+                            <span>${d}</span>
+                            <span style="font-size:0.65rem; color:var(--text-muted);">${pct}%</span>
+                        </div>
+                    `;
+                    box.appendChild(dotsWrap);
+                    box.onclick = () => openDayModal(key, d, MONTHS_NAMES[month]);
+                    grid.appendChild(box);
+                }
+                container.appendChild(grid);
+            }
+
+            // Gráfico Mensual (1 al 31)
+            const chartBox = document.getElementById('dynamicChartBox');
+            chartBox.innerHTML = '';
+            let monthChecks = 0;
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                let dayDone = 0;
+                habits.forEach(h => { if (h.logs[key]) { dayDone++; monthChecks++; } });
+                const pct = habits.length > 0 ? Math.round((dayDone / habits.length) * 100) : 0;
+
+                const col = document.createElement('div');
+                col.className = 'chart-col';
+                col.innerHTML = `
+                    <div class="chart-bar ${pct >= 75 ? 'high' : ''}" style="height:${Math.max(pct, 4)}%"></div>
+                    <span class="chart-lbl">${d % 3 === 1 ? d : ''}</span>
+                `;
+                chartBox.appendChild(col);
+            }
+
+            const totalPossible = habits.length * daysInMonth;
+            const monthPct = totalPossible > 0 ? Math.round((monthChecks / totalPossible) * 100) : 0;
+            document.getElementById('kpiPeriodLbl').textContent = 'Promedio Mes';
+            document.getElementById('kpiPeriodVal').textContent = `${monthPct}%`;
+            document.getElementById('chartSectionTitle').textContent = `📊 Evolución Diaria de ${MONTHS_NAMES[month]}`;
         }
 
-        function exportBackup() {
+        function renderYearView(habits) {
+            const year = ui.cursorDate.getFullYear();
+            document.getElementById('currentPeriodLabel').textContent = `Año ${year}`;
+
+            const container = document.getElementById('matrixMainContainer');
+            container.innerHTML = '';
+            const yearGrid = document.createElement('div');
+            yearGrid.className = 'year-grid';
+
+            const chartBox = document.getElementById('dynamicChartBox');
+            chartBox.innerHTML = '';
+
+            let yearTotalDone = 0;
+            let yearTotalPossible = 0;
+
+            for (let m = 0; m < 12; m++) {
+                const daysInM = new Date(year, m + 1, 0).getDate();
+                const mCard = document.createElement('div');
+                mCard.className = 'year-month-card';
+                mCard.onclick = () => {
+                    ui.cursorDate = new Date(year, m, 1);
+                    setScale('month');
+                };
+
+                const dotsGrid = document.createElement('div');
+                dotsGrid.className = 'mini-month-dots';
+
+                let monthDone = 0;
+                for (let d = 1; d <= daysInM; d++) {
+                    const key = `${year}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    let dayCount = 0;
+                    habits.forEach(h => { if (h.logs[key]) { dayCount++; monthDone++; yearTotalDone++; } });
+                    yearTotalPossible += habits.length;
+
+                    const pct = habits.length > 0 ? Math.round((dayCount / habits.length) * 100) : 0;
+                    const cell = document.createElement('div');
+                    let lvl = '';
+                    if (pct > 0 && pct < 50) lvl = ' l1';
+                    else if (pct >= 50 && pct < 80) lvl = ' l2';
+                    else if (pct >= 80) lvl = ' l3';
+
+                    cell.className = 'mini-dot-cell' + lvl;
+                    dotsGrid.appendChild(cell);
+                }
+
+                const mPct = (habits.length * daysInM) > 0 ? Math.round((monthDone / (habits.length * daysInM)) * 100) : 0;
+                mCard.innerHTML = `<div class="year-month-head"><span>${MONTHS_NAMES[m]}</span><span style="color:var(--accent)">${mPct}%</span></div>`;
+                mCard.appendChild(dotsGrid);
+                yearGrid.appendChild(mCard);
+
+                // Barra de cada mes en el gráfico anual
+                const col = document.createElement('div');
+                col.className = 'chart-col';
+                col.innerHTML = `
+                    <span class="chart-val">${mPct}%</span>
+                    <div class="chart-bar ${mPct >= 75 ? 'high' : ''}" style="height:${Math.max(mPct, 4)}%"></div>
+                    <span class="chart-lbl">${MONTHS_NAMES[m].slice(0,3)}</span>
+                `;
+                chartBox.appendChild(col);
+            }
+
+            container.appendChild(yearGrid);
+            const yearPct = yearTotalPossible > 0 ? Math.round((yearTotalDone / yearTotalPossible) * 100) : 0;
+            document.getElementById('kpiPeriodLbl').textContent = `Promedio ${year}`;
+            document.getElementById('kpiPeriodVal').textContent = `${yearPct}%`;
+            document.getElementById('chartSectionTitle').textContent = `📊 Comparativa Mensual ${year}`;
+        }
+
+        function openDayModal(dateKey, dayNum, monthName) {
+            const backdrop = document.getElementById('dayModalBackdrop');
+            const list = document.getElementById('modalHabitsList');
+            document.getElementById('modalDateTitle').textContent = `${dayNum} de ${monthName}`;
+            list.innerHTML = '';
+
+            const habits = getFilteredHabits();
+            habits.forEach(h => {
+                const done = !!h.logs[dateKey];
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'chip';
+                btn.style.display = 'flex';
+                btn.style.justifyContent = 'space-between';
+                btn.style.padding = '12px';
+                btn.style.borderColor = done ? 'var(--success)' : 'var(--border-color)';
+                btn.innerHTML = `
+                    <span><span class="cat-dot" style="background:${CAT_COLORS[h.category]}"></span> ${h.name}</span>
+                    <span style="color:${done ? 'var(--success)' : 'var(--text-muted)'}">${done ? '✓ Cumplido' : 'Pendiente'}</span>
+                `;
+                btn.onclick = () => {
+                    toggleHabitLog(h.id, dateKey);
+                    openDayModal(dateKey, dayNum, monthName);
+                };
+                list.appendChild(btn);
+            });
+            backdrop.style.display = 'flex';
+        }
+
+        function closeDayModal(e) {
+            document.getElementById('dayModalBackdrop').style.display = 'none';
+        }
+
+        function changeTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem(THEME_KEY, theme);
+        }
+
+        function updateStepGoal() {
+            const val = parseInt(document.getElementById('goalInput').value);
+            if (!isNaN(val) && val >= 500) {
+                state.stepGoal = val;
+                syncMovementAutoHabit();
+                saveState();
+                renderAll();
+                alert('Meta actualizada a ' + val.toLocaleString('es-AR') + ' pasos.');
+            }
+        }
+
+        function switchMainSection(sec, btnEl) {
+            document.querySelectorAll('.main-tab-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('sec-' + sec).classList.add('active');
+            document.querySelectorAll('.b-nav-btn').forEach(b => b.classList.remove('active'));
+            btnEl.classList.add('active');
+        }
+
+        function exportBackupJson() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
             const a = document.createElement('a');
             a.setAttribute("href", dataStr);
-            a.setAttribute("download", "respaldo_habitos.json");
+            a.setAttribute("download", "habitos_calendario_backup.json");
             document.body.appendChild(a);
             a.click();
             a.remove();
         }
 
-        function importBackup(event) {
-            const file = event.target.files[0];
+        function importBackupJson(e) {
+            const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function(ev) {
                 try {
-                    const imported = JSON.parse(e.target.result);
+                    const imported = JSON.parse(ev.target.result);
                     if (imported && Array.isArray(imported.habits)) {
-                        state = imported;
-                        saveData();
-                        render();
-                        alert('Respaldo restaurado correctamente.');
-                    } else {
-                        alert('El archivo JSON no tiene el formato correcto.');
+                        state = Object.assign(state, imported);
+                        saveState();
+                        renderAll();
+                        alert('Backup restaurado correctamente.');
                     }
                 } catch (err) {
                     alert('Error al leer el archivo JSON.');
                 }
             };
             reader.readAsText(file);
-            event.target.value = '';
+            e.target.value = '';
         }
 
-        function render() {
-            const todayIdx = getTodayIndex();
-
-            // Resaltar columna de hoy
-            const ths = document.querySelectorAll('#tableHeadRow th');
-            ths.forEach((th, idx) => {
-                if (idx - 1 === todayIdx) {
-                    th.classList.add('today-col');
-                } else {
-                    th.classList.remove('today-col');
-                }
-            });
-
-            // Renderizar tabla
-            const tbody = document.getElementById('habitTableBody');
-            tbody.innerHTML = '';
-
-            let totalChecksWeek = 0;
-            let todayChecks = 0;
-            let bestStreak = 0;
-            let bestHabitName = 'Sin racha activa aún';
-
-            state.habits.forEach(habit => {
-                const tr = document.createElement('tr');
-
-                const tdName = document.createElement('td');
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'habit-name-cell';
-                const span = document.createElement('span');
-                span.textContent = habit.name;
-                const delBtn = document.createElement('button');
-                delBtn.className = 'delete-btn';
-                delBtn.innerHTML = '✕';
-                delBtn.title = 'Eliminar hábito';
-                delBtn.onclick = () => deleteHabit(habit.id);
-
-                nameDiv.appendChild(span);
-                nameDiv.appendChild(delBtn);
-                tdName.appendChild(nameDiv);
-                tr.appendChild(tdName);
-
-                habit.days.forEach((done, dayIdx) => {
-                    if (done) totalChecksWeek++;
-                    if (done && dayIdx === todayIdx) todayChecks++;
-
-                    const td = document.createElement('td');
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'check-btn' + (done ? ' completed' : '');
-                    btn.innerHTML = '✓';
-                    btn.onclick = () => toggleDay(habit.id, dayIdx);
-                    td.appendChild(btn);
-                    tr.appendChild(td);
-                });
-
-                const streak = calculateStreak(habit.days);
-                if (streak > bestStreak) {
-                    bestStreak = streak;
-                    bestHabitName = habit.name;
-                }
-
-                const tdStreak = document.createElement('td');
-                const badge = document.createElement('span');
-                badge.className = 'streak-badge' + (streak > 0 ? ' active' : '');
-                badge.textContent = `🔥 ${streak} d`;
-                tdStreak.appendChild(badge);
-                tr.appendChild(tdStreak);
-
-                tbody.appendChild(tr);
-            });
-
-            // Actualizar KPIs
-            const totalHabits = state.habits.length;
-            const todayPct = totalHabits > 0 ? Math.round((todayChecks / totalHabits) * 100) : 0;
-            const totalPossibleWeek = totalHabits * 7;
-            const weekPct = totalPossibleWeek > 0 ? Math.round((totalChecksWeek / totalPossibleWeek) * 100) : 0;
-
-            document.getElementById('kpiToday').textContent = `${todayPct}%`;
-            document.getElementById('kpiTodaySub').textContent = `${todayChecks} de ${totalHabits} completados (${DAYS[todayIdx]})`;
-            document.getElementById('kpiWeek').textContent = `${weekPct}%`;
-            document.getElementById('kpiWeekSub').textContent = `${totalChecksWeek} de ${totalPossibleWeek} bloques semanales`;
-            document.getElementById('kpiBestStreak').textContent = `${bestStreak} ${bestStreak === 1 ? 'día' : 'días'}`;
-            document.getElementById('kpiBestHabit').textContent = bestStreak > 0 ? bestHabitName : 'Marcá casillas para iniciar racha';
-
-            // Renderizar gráfico de barras diario
-            const chartContainer = document.getElementById('dailyBarChart');
-            chartContainer.querySelectorAll('.bar-col').forEach(el => el.remove());
-
-            DAYS.forEach((dayLabel, dayIdx) => {
-                let completedOnDay = 0;
-                state.habits.forEach(h => {
-                    if (h.days[dayIdx]) completedOnDay++;
-                });
-                const pct = totalHabits > 0 ? Math.round((completedOnDay / totalHabits) * 100) : 0;
-
-                const col = document.createElement('div');
-                col.className = 'bar-col';
-
-                const pctLabel = document.createElement('span');
-                pctLabel.className = 'bar-pct';
-                pctLabel.textContent = `${pct}%`;
-
-                const fill = document.createElement('div');
-                fill.className = 'bar-fill' + (pct >= 75 ? ' goal-met' : '');
-                fill.style.height = `${Math.max(pct, 4)}%`;
-
-                const daySpan = document.createElement('span');
-                daySpan.className = 'bar-day';
-                daySpan.textContent = dayLabel;
-                if (dayIdx === todayIdx) {
-                    daySpan.style.color = 'var(--accent)';
-                }
-
-                col.appendChild(pctLabel);
-                col.appendChild(fill);
-                col.appendChild(daySpan);
-                chartContainer.appendChild(col);
-            });
-
-            // Renderizar barras horizontales por hábito
-            const progressList = document.getElementById('habitProgressList');
-            progressList.innerHTML = '';
-
-            state.habits.forEach(habit => {
-                const count = habit.days.filter(Boolean).length;
-                const pct = Math.round((count / 7) * 100);
-                const streak = calculateStreak(habit.days);
-
-                const item = document.createElement('div');
-                item.className = 'habit-progress-item';
-
-                const header = document.createElement('div');
-                header.className = 'habit-progress-header';
-                header.innerHTML = `<span>${habit.name}</span><span>${count}/7 días (${pct}%) · 🔥 ${streak}d</span>`;
-
-                const track = document.createElement('div');
-                track.className = 'habit-progress-track';
-
-                const fill = document.createElement('div');
-                fill.className = 'habit-progress-fill';
-                fill.style.width = `${pct}%`;
-
-                track.appendChild(fill);
-                item.appendChild(header);
-                item.appendChild(track);
-                progressList.appendChild(item);
-            });
-        }
-
-        // Inicializar fecha e interfaz
-        const now = new Date();
-        document.getElementById('currentDateLabel').textContent = now.toLocaleDateString('es-AR', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        // Inicialización
+        document.getElementById('liveTodayText').textContent = new Date().toLocaleDateString('es-AR', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         });
 
-        loadData();
-        render();
+        loadState();
+        checkShortcutsUrlParams();
+        syncMovementAutoHabit();
+        saveState();
+        setScale('month');
     </script>
 </body>
 </html>
